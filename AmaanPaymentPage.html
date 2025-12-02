@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MyFatoorah Card View Payment</title>
+
+    <!-- Test Environment -->
+    <script src="https://demo.myfatoorah.com/cardview/v3/session.js"></script>
+
+    <!-- For Egypt Live: use this instead -->
+    <!-- <script src="https://eg.myfatoorah.com/cardview/v3/session.js"></script> -->
+</head>
+
+<body style="font-family: Arial; max-width: 450px; margin: auto; padding-top: 30px;">
+
+    <h2>Pay with Card</h2>
+
+    <!-- Card View Container -->
+    <div id="card-element" style="margin-bottom: 20px;"></div>
+
+    <!-- Button -->
+    <button onclick="submitPayment()" 
+            style="padding: 12px 20px; font-size: 16px; cursor: pointer;">
+        Pay Now
+    </button>
+
+    <script>
+
+        // 1️⃣ Card View Configuration
+        var config = {
+            countryCode: "KWT",      // Replace with your country (EG, KW, SA, QA, etc.)
+            sessionId: "2d0b32c7-4602-44ea-8293-4a7ce02c4d03", // Replace with the SessionId from InitiateSession API
+            cardViewId: "card-element",
+            supportedNetworks: "v,m,md,ae"
+        };
+
+        // 2️⃣ Initialize Card View
+        myFatoorah.init(config);
+
+        // 3️⃣ Submit Payment
+        function submitPayment() {
+
+            myFatoorah.submit()
+
+                // ⭐ On success
+                .then(function (response) {
+
+                    console.log("Payment success response:", response);
+
+                    var sessionId = response.sessionId; // Send this to backend
+                    var cardInfo = response.card;
+
+                    alert("Card Validated Successfully. Now call ExecutePayment from your backend.");
+
+                    // TODO:
+                    // Make a fetch() POST request to your backend:
+                    // POST /api/payments/execute
+                    // Body: { sessionId: sessionId }
+                })
+
+                // ❌ On failure
+                .catch(function (error) {
+                    console.log("Payment error:", error);
+                    alert("Error: " + error.message);
+                });
+        }
+
+    </script>
+
+</body>
+</html>
