@@ -2,13 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>MyFatoorah Card View Payment</title>
+    <title>MyFatoorah Card View Payment - Production</title>
 
-    <!-- Test Environment -->
-    <script src="https://demo.myfatoorah.com/cardview/v3/session.js"></script>
-
-    <!-- For Egypt Live: use this instead -->
-    <!-- <script src="https://eg.myfatoorah.com/cardview/v3/session.js"></script> -->
+    <!-- Production Environment for Kuwait -->
+    <script src="https://kw.myfatoorah.com/cardview/v3/session.js"></script>
+    <!-- For Egypt, use: https://eg.myfatoorah.com/cardview/v3/session.js -->
 </head>
 
 <body style="font-family: Arial; max-width: 450px; margin: auto; padding-top: 30px;">
@@ -25,13 +23,12 @@
     </button>
 
     <script>
-
         // 1️⃣ Card View Configuration
         var config = {
-            countryCode: "KWT",      // Replace with your country (EG, KW, SA, QA, etc.)
-            sessionId: "98fbdbd2-55c8-40eb-b0ef-8d5afc3de9de", // Replace with the SessionId from InitiateSession API
+            countryCode: "KWT", // Your merchant account country
+            sessionId: "<LIVE_SESSION_ID>", // Replace with SessionId from live InitiateSession API
             cardViewId: "card-element",
-            supportedNetworks: "v,m,md,ae"
+            supportedNetworks: "v,m,md,ae" // Visa, Mastercard, Mada, American Express
         };
 
         // 2️⃣ Initialize Card View
@@ -39,12 +36,8 @@
 
         // 3️⃣ Submit Payment
         function submitPayment() {
-
             myFatoorah.submit()
-
-                // ⭐ On success
                 .then(function (response) {
-
                     console.log("Payment success response:", response);
 
                     var sessionId = response.sessionId; // Send this to backend
@@ -52,101 +45,22 @@
 
                     alert("Card Validated Successfully. Now call ExecutePayment from your backend.");
 
-                    // TODO:
-                    // Make a fetch() POST request to your backend:
-                    // POST /api/payments/execute
-                    // Body: { sessionId: sessionId }
+                    // ✅ Call your backend to execute payment
+                    fetch("/api/payments/execute", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ sessionId: sessionId })
+                    })
+                    .then(res => res.json())
+                    .then(data => console.log("ExecutePayment response:", data))
+                    .catch(err => console.error("Error executing payment:", err));
                 })
-
-                // ❌ On failure
                 .catch(function (error) {
                     console.log("Payment error:", error);
                     alert("Error: " + error.message);
                 });
         }
-
     </script>
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
